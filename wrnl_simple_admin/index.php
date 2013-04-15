@@ -42,6 +42,24 @@
 	}
 
 	/*
+	Change login image to custom logo. This needs to have a settings page built for dynamic updating 
+	*/
+	add_action("login_head", "my_login_head");
+	function my_login_head() {
+		echo "
+		<style>
+		body.login #login h1 a {
+			background: url('".get_bloginfo('template_url')."/images/logo-blue.png') no-repeat scroll center top transparent;
+			-webkit-background-size: contain;
+		    -moz-background-size: contain;
+		    -o-background-size: contain;
+		    background-size: contain;
+		}
+		</style>
+		";
+	}
+
+	/*
 	Change login logo link to site home url
 	*/
 	add_filter('login_headerurl', 'wpc_url_login');
