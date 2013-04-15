@@ -1,7 +1,7 @@
 WRNL Simple Admin
 ======
 
-Remove WordPress logo and link drop down
+Remove WordPress logo and link drop down from the admin bar
 
 Change "Howdy" user name drop down with just a logout button
 
