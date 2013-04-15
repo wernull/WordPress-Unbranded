@@ -11,11 +11,10 @@
 	
 	*/
 
+	/*
+	Remove Howdy user name drop down and replace it with just a logout button
+	*/
 	add_action( 'wp_before_admin_bar_render', 'custom_logout_link' );
-	add_action( 'wp_before_admin_bar_render', 'dashboard_tweaks' );
-	add_filter('login_headerurl', 'wpc_url_login');
-
-
 	function custom_logout_link() {
 		global $wp_admin_bar;
 		$wp_admin_bar->add_menu( array(
@@ -27,6 +26,10 @@
 		$wp_admin_bar->remove_menu('my-account');
 	}
 
+	/*
+	Remove WordPress logo and link drop down
+	*/
+	add_action( 'wp_before_admin_bar_render', 'dashboard_tweaks' );
 	function dashboard_tweaks() {
 		global $wp_admin_bar;
 		
@@ -38,6 +41,10 @@
 		$wp_admin_bar->remove_menu('feedback');
 	}
 
+	/*
+	Change login logo link to site home url
+	*/
+	add_filter('login_headerurl', 'wpc_url_login');
 	function wpc_url_login(){
 	    return home_url();
 	}
