@@ -81,10 +81,11 @@
 	}
 
 	/*
-	Change login logo link to site home url
+	Change login logo link to site home url (default) or user input
 	*/
 	function wrnl_url_login(){
-	    return home_url();
+		global $wrnl_simple_admin_options;
+	    return $wrnl_simple_admin_options['custom_login_path'];
 	}
 
 
@@ -102,6 +103,7 @@
 		$option_default['custom_logout'] = true;
 		$option_default['hide_wp_logo'] = true;
 		$option_default['custom_login'] = true;
+		$option_default['custom_login_path'] = home_url();
 		$option_default['custom_login_image'] = plugins_url( 'images/default.png' , __FILE__ );
 
 		$option = array_merge($option_default, $option);
