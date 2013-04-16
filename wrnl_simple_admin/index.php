@@ -7,15 +7,37 @@
 		Version: 0.0.1
 		Author: Kyle Werner
 		Author URI: http://wernull.com
-		License: GPLv2 or later
-	
+
+	    This program is free software; you can redistribute it and/or modify
+	    it under the terms of the GNU General Public License version 2, 
+	    as published by the Free Software Foundation.
+
+	    This program is distributed in the hope that it will be useful,
+	    but WITHOUT ANY WARRANTY; without even the implied warranty of
+	    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	    GNU General Public License for more details.
 	*/
+
+	$wrnl_simple_admin_options = wrnl_get_options_stored();
+
+	if($wrnl_simple_admin_options['custom_logout']){
+		add_action( 'wp_before_admin_bar_render', 'wrnl_custom_logout_link' );
+	}
+	if($wrnl_simple_admin_options['hide_wp_logo']){
+		add_action( 'wp_before_admin_bar_render', 'wrnl_dashboard_tweaks' );
+	}
+	if($wrnl_simple_admin_options['custom_login']){
+		add_action("login_head", "wrnl_login_head");
+		add_filter('login_headerurl', 'wrnl_url_login');
+	}
+
+
+
 
 	/*
 	Remove Howdy user name drop down and replace it with just a logout button
 	*/
-	add_action( 'wp_before_admin_bar_render', 'custom_logout_link' );
-	function custom_logout_link() {
+	function wrnl_custom_logout_link() {
 		global $wp_admin_bar;
 		$wp_admin_bar->add_menu( array(
 			'id'    => 'wp-custom-logout',
@@ -29,8 +51,7 @@
 	/*
 	Remove WordPress logo and link drop down
 	*/
-	add_action( 'wp_before_admin_bar_render', 'dashboard_tweaks' );
-	function dashboard_tweaks() {
+	function wrnl_dashboard_tweaks() {
 		global $wp_admin_bar;
 		
 		$wp_admin_bar->remove_menu('wp-logo');
@@ -44,12 +65,12 @@
 	/*
 	Change login image to custom logo. This needs to have a settings page built for dynamic updating 
 	*/
-	add_action("login_head", "my_login_head");
-	function my_login_head() {
+	function wrnl_login_head() {
+		global $wrnl_simple_admin_options;
 		echo "
 		<style>
 		body.login #login h1 a {
-			background: url('".get_bloginfo('template_url')."/images/logo-blue.png') no-repeat scroll center top transparent;
+			background: url('".$wrnl_simple_admin_options['custom_login_image']."') no-repeat scroll center top transparent;
 			-webkit-background-size: contain;
 		    -moz-background-size: contain;
 		    -o-background-size: contain;
@@ -62,10 +83,32 @@
 	/*
 	Change login logo link to site home url
 	*/
-	add_filter('login_headerurl', 'wpc_url_login');
-	function wpc_url_login(){
+	function wrnl_url_login(){
 	    return home_url();
 	}
+
+
+	/*
+	plugin options
+	*/
+	function wrnl_get_options_stored(){
+		$option = get_option('wrnl_simple_admin');
+		
+		if(!is_array($option)) {
+			$option = array();
+		} 
+
+		$option_default = array();
+		$option_default['custom_logout'] = true;
+		$option_default['hide_wp_logo'] = true;
+		$option_default['custom_login'] = true;
+		$option_default['custom_login_image'] = plugins_url( 'images/default.png' , __FILE__ );
+
+		$option = array_merge($option_default, $option);
+
+		return $option;
+	}
+
 
 
 	
