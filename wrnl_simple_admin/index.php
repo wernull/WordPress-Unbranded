@@ -2,9 +2,9 @@
 
 	/*
 		Plugin Name: WRNL Simple Admin
-		Plugin URI: http://wernull.com/simple-admin
+		Plugin URI: http://wernull.com/plugins/wrnl-simple-admin
 		Description: Remove features of the WordPress admin bar
-		Version: 0.0.1
+		Version: 0.1.0
 		Author: Kyle Werner
 		Author URI: http://wernull.com
 
@@ -30,9 +30,6 @@
 		add_action("login_head", "wrnl_login_head");
 		add_filter('login_headerurl', 'wrnl_url_login');
 	}
-
-
-
 
 	/*
 	Remove Howdy user name drop down and replace it with just a logout button
@@ -75,6 +72,7 @@
 		    -moz-background-size: contain;
 		    -o-background-size: contain;
 		    background-size: contain;
+		    margin-bottom: 1em;
 		}
 		</style>
 		";
