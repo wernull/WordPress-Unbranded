@@ -2,7 +2,7 @@
 
 	/*
 		Plugin Name: WRNL Simple Admin
-		Plugin URI: http://wernull.com/plugins/wrnl-simple-admin
+		Plugin URI: http://wernull.com/plugins/wrnl_simple_admin
 		Description: Remove features of the WordPress admin bar
 		Version: 0.1.0
 		Author: Kyle Werner
