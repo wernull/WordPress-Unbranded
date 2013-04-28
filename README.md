@@ -1,4 +1,4 @@
-WRNL Simple Admin
+Wordpress Unbranded / Simple Admin
 ======
 
 Remove WordPress logo and link drop down from the admin bar
