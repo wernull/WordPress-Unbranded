@@ -4,7 +4,7 @@
 		Plugin Name: WRNL Simple Admin
 		Plugin URI: http://wernull.com/plugins/wrnl_simple_admin
 		Description: Remove features of the WordPress admin bar
-		Version: 0.1.0
+		Version: 0.1.1
 		Author: Kyle Werner
 		Author URI: http://wernull.com
 
@@ -38,7 +38,7 @@
 		global $wp_admin_bar;
 		$wp_admin_bar->add_menu( array(
 			'id'    => 'wp-custom-logout',
-			'title' => 'Logout',
+			'title' => 'Log Out',
 			'parent'=> 'top-secondary',
 			'href'  => wp_logout_url()
 		) );
