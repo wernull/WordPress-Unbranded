@@ -18,7 +18,7 @@
 	    GNU General Public License for more details.
 	*/
 
-	$wrnl_wp_unbranded_options = wrnl_get_options_stored();
+	$wrnl_wp_unbranded_options = wrnl_get_options();
 
 	if($wrnl_wp_unbranded_options['custom_logout']){
 		add_action( 'wp_before_admin_bar_render', 'wrnl_custom_logout_link' );
@@ -50,7 +50,7 @@
 			<form action="options.php" method="post">
 				<?php 
 					settings_fields('wrnl-wp-unbranded');
-					setting_plugins(); 
+					setting_option_fields(); 
 				?>
 				<p class="submit"><input type="submit" name="submit" id="submit" class="button-primary" value="Save Changes"></p>
 			</form>
@@ -58,13 +58,22 @@
     	<?php
 	}
 
-	function setting_plugins()
+	function setting_option_fields()
     {
-        $options = wrnl_get_options_stored();
+        $options = wrnl_get_options();
 		
-        echo '<input type="hidden" name="wrnl_wp_unbranded[custom_logout]" value="0" />
+        echo '<br /><input type="hidden" name="wrnl_wp_unbranded[custom_logout]" value="0" />
         <label><input type="checkbox" name="wrnl_wp_unbranded[custom_logout]" value="1"'. (($options['custom_logout']) ? ' checked="checked"' : '') .' /> 
-        Custom Log Out</label><br />';
+        Remove "Howdy" and replace with log out button</label><br />';
+        echo '<input type="hidden" name="wrnl_wp_unbranded[custom_logout_text]" value="0" />
+        <label>Log Out Button Text: <input type="text" name="wrnl_wp_unbranded[custom_logout_text]" value="'. $options['custom_logout_text'] . '" /> 
+        </label><br /><br />';
+        echo '<input type="hidden" name="wrnl_wp_unbranded[hide_wp_logo]" value="0" />
+        <label><input type="checkbox" name="wrnl_wp_unbranded[hide_wp_logo]" value="1"'. (($options['hide_wp_logo']) ? ' checked="checked"' : '') .' /> 
+        Remove WordPress Logo and DropDown</label><br /><br />';
+        echo '<input type="hidden" name="wrnl_wp_unbranded[custom_login]" value="0" />
+        <label><input type="checkbox" name="wrnl_wp_unbranded[custom_login]" value="1"'. (($options['custom_login']) ? ' checked="checked"' : '') .' /> 
+        Custom Login Logo</label><br />';
     }
 
     function settings_validate( $input ) { return $input; }
@@ -74,9 +83,11 @@
 	*/
 	function wrnl_custom_logout_link() {
 		global $wp_admin_bar;
+		$option = wrnl_get_options();
+
 		$wp_admin_bar->add_menu( array(
 			'id'    => 'wp-custom-logout',
-			'title' => 'Log Out',
+			'title' => $option['custom_logout_text'],
 			'parent'=> 'top-secondary',
 			'href'  => wp_logout_url()
 		) );
@@ -124,11 +135,10 @@
 	    return $wrnl_wp_unbranded_options['custom_login_path'];
 	}
 
-
 	/*
-	plugin options
+	plugin options and defaults
 	*/
-	function wrnl_get_options_stored(){
+	function wrnl_get_options(){
 		$option = get_option('wrnl_wp_unbranded');
 		
 		if(!is_array($option)) {
@@ -137,6 +147,7 @@
 
 		$option_default = array();
 		$option_default['custom_logout'] = 1;
+		$option_default['custom_logout_text'] = 'Log Out';
 		$option_default['hide_wp_logo'] = 1;
 		$option_default['custom_login'] = 1;
 		$option_default['custom_login_path'] = home_url();
