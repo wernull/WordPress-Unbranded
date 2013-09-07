@@ -73,8 +73,29 @@
         Remove WordPress Logo and DropDown</label><br /><br />';
         echo '<input type="hidden" name="wrnl_wp_unbranded[custom_login]" value="0" />
         <label><input type="checkbox" name="wrnl_wp_unbranded[custom_login]" value="1"'. (($options['custom_login']) ? ' checked="checked"' : '') .' /> 
-        Custom Login Logo</label><br />';
+        Custom Login Logo</label><br/><br/>';
+        echo '<img id="logo_url_img" src="'. esc_url( $options['custom_login_image'] ) .'"/><br/>
+        <input id="logo_url_text" style="width:45em; max-width:80%;" type="text" name="wrnl_wp_unbranded[custom_login_image]" value="'. esc_url( $options['custom_login_image'] ) .'" />  
+        <br/><input id="upload_logo_button" type="button" class="button" value="Update Image" />';
     }
+
+    function wrnl_options_enqueue_scripts() {
+		wp_register_script( 'wrnl-upload', plugins_url('js/wrnl-upload.js', __FILE__ ), array('jquery','media-upload','thickbox') );
+
+		if ( 'settings_page_wrnl-wp-unbranded' == get_current_screen() -> id ) {
+			wp_enqueue_script('jquery');
+
+			wp_enqueue_script('thickbox');
+			wp_enqueue_style('thickbox');
+
+			wp_enqueue_script('media-upload');
+			wp_enqueue_script('wrnl-upload');
+
+		}
+
+	}
+	add_action('admin_enqueue_scripts', 'wrnl_options_enqueue_scripts');
+
 
     function settings_validate( $input ) { return $input; }
 
@@ -151,7 +172,8 @@
 		$option_default['hide_wp_logo'] = 1;
 		$option_default['custom_login'] = 1;
 		$option_default['custom_login_path'] = home_url();
-		$option_default['custom_login_image'] = plugins_url( 'images/default.png' , __FILE__ );
+		$option_default['custom_login_image_default'] = plugins_url( 'images/default.png' , __FILE__ );
+		$option_default['custom_login_image'] = $option_default['custom_login_image_default'];
 
 		$option = array_merge($option_default, $option);
 
