@@ -4,8 +4,8 @@
 		Plugin Name: WordPress Unbranded
 		Plugin URI: http://wernull.com/2013/04/wordpress-unbranded-simple-admin-plugin/
 		Description: Remove features of the WordPress admin bar
-		Version: 0.2.0
-		Author: Kyle Werner
+		Version: 0.3.0
+		Author: Kyle Werner @wernull
 		Author URI: http://wernull.com
 
 	    This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,9 @@
 	}
 	if($wrnl_wp_unbranded_options['hide_wp_logo']){
 		add_action( 'wp_before_admin_bar_render', 'wrnl_dashboard_tweaks' );
+	}
+	if($wrnl_wp_unbranded_options['footer_custom']){
+		add_filter('admin_footer_text', 'wrnl_footer_text' );
 	}
 	if($wrnl_wp_unbranded_options['custom_login']){
 		add_action("login_head", "wrnl_login_head");
@@ -71,6 +74,12 @@
         echo '<input type="hidden" name="wrnl_wp_unbranded[hide_wp_logo]" value="0" />
         <label><input type="checkbox" name="wrnl_wp_unbranded[hide_wp_logo]" value="1"'. (($options['hide_wp_logo']) ? ' checked="checked"' : '') .' /> 
         Remove WordPress Logo and DropDown</label><br /><br />';
+        echo '<input type="hidden" name="wrnl_wp_unbranded[footer_custom]" value="0" />
+        <label><input type="checkbox" name="wrnl_wp_unbranded[footer_custom]" value="1"'. (($options['footer_custom']) ? ' checked="checked"' : '') .' /> 
+        Custom Footer Message</label><br />';
+        echo '<input type="hidden" name="wrnl_wp_unbranded[footer_text]" value="0" />
+        <label>Footer Text: <input type="text" name="wrnl_wp_unbranded[footer_text]" value="'. $options['footer_text'] . '" /> 
+        </label><br /><br />';
         echo '<input type="hidden" name="wrnl_wp_unbranded[custom_login]" value="0" />
         <label><input type="checkbox" name="wrnl_wp_unbranded[custom_login]" value="1"'. (($options['custom_login']) ? ' checked="checked"' : '') .' /> 
         Custom Login Logo</label><br/><br/>';
@@ -128,6 +137,13 @@
 		$wp_admin_bar->remove_menu('support-forums');
 		$wp_admin_bar->remove_menu('feedback');
 	}
+	/*
+	Change or Remove WordPress admin footer text
+	*/
+	function wrnl_footer_text() {
+		global $wrnl_wp_unbranded_options;
+		echo $wrnl_wp_unbranded_options['footer_text'];
+	}
 
 	/*
 	Change login image to custom logo. This needs to have a settings page built for dynamic updating 
@@ -170,6 +186,8 @@
 		$option_default['custom_logout'] = 1;
 		$option_default['custom_logout_text'] = 'Log Out';
 		$option_default['hide_wp_logo'] = 1;
+		$option_default['footer_custom'] = 1;
+		$option_default['footer_text'] = '';
 		$option_default['custom_login'] = 1;
 		$option_default['custom_login_path'] = home_url();
 		$option_default['custom_login_image_default'] = plugins_url( 'images/default.png' , __FILE__ );
