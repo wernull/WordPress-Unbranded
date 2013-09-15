@@ -4,7 +4,7 @@
 		Plugin Name: WordPress Unbranded
 		Plugin URI: http://wernull.com/2013/04/wordpress-unbranded-simple-admin-plugin/
 		Description: Remove features of the WordPress admin bar
-		Version: 0.3.0
+		Version: 1.0.0
 		Author: Kyle Werner @wernull
 		Author URI: http://wernull.com
 
