@@ -20,6 +20,9 @@
 
 	$wrnl_wp_unbranded_options = wrnl_get_options();
 
+	if($wrnl_wp_unbranded_options['remove_howdy']){
+		add_action( 'wp_before_admin_bar_render', 'wrnl_remove_howdy' );
+	}
 	if($wrnl_wp_unbranded_options['custom_logout']){
 		add_action( 'wp_before_admin_bar_render', 'wrnl_custom_logout_link' );
 	}
@@ -65,9 +68,12 @@
     {
         $options = wrnl_get_options();
 		
+        echo '<br /><input type="hidden" name="wrnl_wp_unbranded[remove_howdy]" value="0" />
+        <label><input type="checkbox" name="wrnl_wp_unbranded[remove_howdy]" value="1"'. (($options['remove_howdy']) ? ' checked="checked"' : '') .' /> 
+        Remove "Howdy"</label><br />';
         echo '<br /><input type="hidden" name="wrnl_wp_unbranded[custom_logout]" value="0" />
         <label><input type="checkbox" name="wrnl_wp_unbranded[custom_logout]" value="1"'. (($options['custom_logout']) ? ' checked="checked"' : '') .' /> 
-        Remove "Howdy" and replace with log out button</label><br />';
+        Remove User Dropdown and replace with log out button</label><br />';
         echo '<input type="hidden" name="wrnl_wp_unbranded[custom_logout_text]" value="0" />
         <label>Log Out Button Text: <input type="text" name="wrnl_wp_unbranded[custom_logout_text]" value="'. $options['custom_logout_text'] . '" /> 
         </label><br /><br />';
@@ -122,6 +128,20 @@
 			'href'  => wp_logout_url()
 		) );
 		$wp_admin_bar->remove_menu('my-account');
+
+	}
+
+	/*
+	Remove Howdy 
+	*/
+	function wrnl_remove_howdy() {
+		global $wp_admin_bar;
+		$my_account=$wp_admin_bar->get_node('my-account');
+			$newtitle = str_replace( 'Howdy,', '', $my_account->title );
+			$wp_admin_bar->add_node( array(
+				'id' => 'my-account',
+				'title' => $newtitle,
+			));
 	}
 
 	/*
@@ -183,6 +203,7 @@
 		} 
 
 		$option_default = array();
+		$option_default['remove_howdy'] = 1;
 		$option_default['custom_logout'] = 1;
 		$option_default['custom_logout_text'] = 'Log Out';
 		$option_default['hide_wp_logo'] = 1;
